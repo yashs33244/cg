@@ -26,7 +26,7 @@ int main()
             return -1;
         }
 
-        setupOpenGL();
+        setupOpenGL(1024, 768);
 
         SDL_Event event;
         is_game_running = true;
@@ -39,9 +39,25 @@ int main()
                     is_game_running = false;
             }
 
-            glClear(GL_COLOR_BUFFER_BIT); // Clear the screen to the background color
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
 
-            // Draw the test line and other shapes
+            // 3D Rendering
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            gluPerspective(45.0f, (GLfloat)1024 / (GLfloat)768, 0.1f, 100.0f);
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+            
+            draw_3d_cube(1.0f);  // Draw the 3D cube
+
+            // Switch to 2D rendering
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            glOrtho(0, 1024, 768, 0, -1, 1);
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+
+            // Draw 2D elements
             draw_line_bresenham(100, 100, 300, 300);  // Example of a red Bresenham line
             draw_circle_midpoint(400, 300, 100);      // Draw a red circle
 
